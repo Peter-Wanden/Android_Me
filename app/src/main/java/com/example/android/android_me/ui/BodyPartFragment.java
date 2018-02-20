@@ -26,11 +26,14 @@ import android.widget.ImageView;
 
 import com.example.android.android_me.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BodyPartFragment extends Fragment {
 
     // TODO (3) Create final Strings to store state information about the list of images and list index
+    public static final String IMAGE_ID_LIST = "image_ids";
+    public static final String LIST_INDEX = "list_index";
 
     // Tag for logging
     private static final String TAG = "BodyPartFragment";
@@ -50,6 +53,11 @@ public class BodyPartFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //TODO 4.5 Load the saved state (the list of images and index list) if there is one
+        if(savedInstanceState !=null){
+            mImageIds = savedInstanceState.getIntegerArrayList(IMAGE_ID_LIST);
+            mListIndex = savedInstanceState.getInt(LIST_INDEX);
+        }
 
         // Inflate the Android-Me fragment layout
         View rootView = inflater.inflate(R.layout.fragment_body_part, container, false);
@@ -71,6 +79,7 @@ public class BodyPartFragment extends Fragment {
                     if(mListIndex < mImageIds.size()-1){
                         mListIndex++;
                     } else {
+                        // TODO (2) If you reach the end of a list of images, set the list index back to 0 (the first item in the list)
                         // We've reached the end of the list, so re-set!
                         mListIndex = 0;
                     }
@@ -78,7 +87,7 @@ public class BodyPartFragment extends Fragment {
                     imageView.setImageResource(mImageIds.get(mListIndex));
                 }
             });
-            // TODO (2) If you reach the end of a list of images, set the list index back to 0 (the first item in the list)
+
 
         } else {
             Log.v(TAG, "This fragment has a null list of image id's");
@@ -100,4 +109,11 @@ public class BodyPartFragment extends Fragment {
     }
 
     // TODO (4) Override onSaveInstanceState and save the current state of this fragment
+    @Override
+    public void onSaveInstanceState(Bundle currentState){
+        // Current state has a list of key value pairs. We will add mImageList and the list index
+        // of the current body part fragment to the bundle.
+        currentState.putIntegerArrayList(IMAGE_ID_LIST, (ArrayList<Integer>) mImageIds);
+        currentState.putInt(LIST_INDEX, mListIndex);
+    }
 }
